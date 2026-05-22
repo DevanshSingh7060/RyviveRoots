@@ -1,0 +1,331 @@
+/* ============================================================
+   CurtainParallaxShowcase — Barista parallax pattern.
+
+   Mechanics (mirrors the reference parallex.html exactly):
+
+   1. One FIXED background layer sits behind the whole section
+      ( .crtn-bg-fixed, position: fixed ). This is the
+      "second / lower" image, always visible behind the
+      transparent slides.
+
+   2. Slides are full-viewport. They alternate:
+      - .crtn-slide.is-solid    → has its own background image
+                                  with background-attachment: fixed,
+                                  plus a 38% dark overlay. This is the
+                                  "first / upper" image carrying its
+                                  own content.
+      - .crtn-slide.is-transparent → no background; the fixed lower
+                                  layer shows through. Content sits
+                                  on top.
+
+   3. background-attachment: fixed on solid slides means the image
+      stays pinned to the viewport while the slide-frame moves —
+      that's the curtain-reveal feel of Barista.
+
+   4. Slim divider lines separate slides.
+
+   All selectors are scoped under `.crtn-pshow*`.
+   ============================================================ */
+
+.crtn-pshow {
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+  background: #14110F;
+  color: #F4EFE6;
+  /* Sits flush against the global header. The Story page begins
+     with this section now (no hero), so we don't add top padding. */
+}
+
+/* ---------- FIXED LOWER LAYER ----------
+   The "second layer" image stays pinned to the viewport. It's
+   visible whenever a transparent slide passes over it. */
+.crtn-pshow-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  background-color: #14110F;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  will-change: background-image;
+  /* Soft swap when the active even-index image changes */
+  transition: background-image 0.6s ease;
+}
+
+.crtn-pshow-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 17, 15, 0.40) 0%,
+      rgba(20, 17, 15, 0.50) 50%,
+      rgba(20, 17, 15, 0.65) 100%
+    );
+}
+
+/* ---------- SECTIONS WRAP ---------- */
+.crtn-pshow-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- BASE SLIDE ---------- */
+.crtn-slide {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ---------- SOLID SLIDE: own image, parallax-pinned ---------- */
+.crtn-slide.is-solid {
+  background-image: var(--slide-bg);
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.crtn-slide.is-solid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 17, 15, 0.35) 0%,
+      rgba(20, 17, 15, 0.45) 50%,
+      rgba(20, 17, 15, 0.60) 100%
+    );
+  z-index: 1;
+}
+
+/* ---------- TRANSPARENT SLIDE: shows fixed bg ---------- */
+.crtn-slide.is-transparent {
+  background: transparent;
+}
+
+/* ---------- CONTENT ---------- */
+.crtn-slide-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #F4EFE6;
+  padding: 0 40px;
+  max-width: 880px;
+  /* Hidden state: we transition opacity + transform in. */
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Keep clickability of CTA even before reveal animation starts */
+  will-change: opacity, transform;
+}
+
+.crtn-slide-content.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fallback: if JS never toggles `.is-visible` (e.g. observer
+   error), `.is-ready` from the parent ensures content stays
+   visible after first paint. Applied via the safety effect. */
+.crtn-slide.is-ready .crtn-slide-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Strong text contrast on transparent slides where content sits
+   directly over a photographic background. A soft radial backdrop
+   improves legibility without an opaque rectangle. */
+.crtn-slide.is-transparent .crtn-slide-content::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 120%;
+  height: 160%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(20, 17, 15, 0.55) 0%,
+    rgba(20, 17, 15, 0.35) 35%,
+    rgba(20, 17, 15, 0.15) 60%,
+    rgba(20, 17, 15, 0) 80%
+  );
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+/* Text shadows for legibility on photographic backgrounds */
+.crtn-slide.is-transparent .crtn-slide-title,
+.crtn-slide.is-solid .crtn-slide-title {
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55);
+}
+
+.crtn-slide.is-transparent .crtn-slide-eyebrow,
+.crtn-slide.is-transparent .crtn-slide-sub {
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.65);
+}
+
+.crtn-slide-eyebrow {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #C4CFB0; /* lighter sage for better contrast */
+  margin-bottom: 18px;
+}
+
+.crtn-slide-title {
+  font-family: var(--font-serif, 'Cormorant Garamond', 'Playfair Display', Georgia, serif);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 6vw, 5.4rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  margin: 0 0 18px;
+  text-transform: uppercase;
+  color: #F4EFE6;
+}
+
+.crtn-slide-title em {
+  font-style: italic;
+  color: #C4CFB0;
+  text-transform: none;
+}
+
+.crtn-slide-sub {
+  font-size: 0.92rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 32px;
+  opacity: 0.95;
+  color: #F4EFE6;
+}
+
+/* ---------- READ-MORE BUTTON ---------- */
+.crtn-slide-btn {
+  display: inline-block;
+  text-decoration: none;
+  color: #F4EFE6;
+  border: 1.5px solid rgba(244, 239, 230, 0.85);
+  background: transparent;
+  padding: 13px 38px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
+.crtn-slide-btn:hover,
+.crtn-slide-btn:focus-visible {
+  background: #F4EFE6;
+  color: #1A1613;
+  border-color: #F4EFE6;
+  text-shadow: none;
+}
+
+.crtn-slide-btn:focus-visible {
+  outline: 2px solid #F4EFE6;
+  outline-offset: 3px;
+}
+
+/* ---------- DIVIDER between slides ---------- */
+.crtn-divider {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 4px;
+  background: rgba(180, 191, 160, 0.22);
+  pointer-events: none;
+}
+
+/* ---------- SCROLL INDICATOR (first slide only) ---------- */
+.crtn-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 36px;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.crtn-scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, #B4BFA0, transparent);
+  animation: crtn-scrollDown 1.8s ease-in-out infinite;
+}
+
+.crtn-scroll-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #F4EFE6;
+}
+
+@keyframes crtn-scrollDown {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ============================================================
+   Responsive — keep the curtain effect intact across devices.
+   `background-attachment: fixed` is broken on iOS Safari, so we
+   fall back to `scroll` on small screens and let the fixed lower
+   layer carry the parallax feel.
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .crtn-slide-content { padding: 0 32px; }
+}
+
+@media (max-width: 640px) {
+  .crtn-slide {
+    height: 92vh;
+    min-height: 520px;
+  }
+  .crtn-pshow-bg { height: 100vh; }
+  .crtn-slide.is-solid {
+    background-attachment: scroll; /* iOS Safari fix */
+  }
+  .crtn-slide-content { padding: 0 24px; }
+  .crtn-slide-title { font-size: clamp(2.2rem, 9vw, 3.6rem); }
+  .crtn-slide-sub { font-size: 0.82rem; letter-spacing: 0.18em; }
+  .crtn-slide-btn { padding: 11px 28px; }
+  .crtn-scroll { bottom: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crtn-slide-content {
+    transition: opacity 0.3s linear;
+    transform: none;
+  }
+  .crtn-pshow-bg { transition: none; }
+  .crtn-scroll-line { animation: none; opacity: 0.5; }
+}
