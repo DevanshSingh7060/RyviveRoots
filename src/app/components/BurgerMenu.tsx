@@ -245,9 +245,11 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
                     </p>
                     <div className="grid grid-cols-4 gap-2 md:gap-3">
                       {menuPreviewCards.map((food, i) => (
-                        <Link
-                          to="/menu"
+                        <a
                           key={i}
+                          href="https://www.instagram.com/ryvive_roots?igsh=aHc1Z3hmMWVheWdl"
+                          target="_blank"
+                          rel="noreferrer"
                           onClick={() => setIsOpen(false)}
                           className="group relative aspect-square overflow-hidden rounded-[2px] cursor-pointer block"
                         >
@@ -260,7 +262,7 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
                           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                             <span className="text-white tracking-[0.2em] uppercase" style={{ fontSize: '9px' }}>{food.title}</span>
                           </div>
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   </motion.div>
@@ -277,7 +279,7 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
                     className="flex items-center gap-6 mt-auto pt-6 border-t shrink-0"
                     style={{ borderColor: 'rgba(244,239,230,0.1)' }}
                   >
-                    <a href="#" className="transition-transform duration-300 hover:scale-110 hover:text-[#A3B19B]" style={{ color: CREAM }}>
+                    <a href="https://www.instagram.com/ryvive_roots?igsh=aHc1Z3hmMWVheWdl" target="_blank" rel="noreferrer" className="transition-transform duration-300 hover:scale-110 hover:text-[#A3B19B]" style={{ color: CREAM }}>
                       <Instagram strokeWidth={1.2} size={18} />
                     </a>
                     <a href="#" className="transition-transform duration-300 hover:scale-110 hover:text-[#A3B19B]" style={{ color: CREAM }}>
@@ -325,7 +327,7 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
       className="relative h-screen w-[420px] bg-[#F5F1E8] overflow-hidden"
     >
       <div
-       className="flex h-full flex-col px-[42px] pt-[42px] pb-[38px]"
+       className="flex h-full flex-col px-[40px] pt-[34px] pb-[28px]"
         style={{ scrollbarWidth: 'none' }}
       >
 
@@ -344,9 +346,9 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
 
         {/* TAGLINE */}
         <p
-         className="mt-[52px] max-w-[290px]"
+         className="mt-[28px] max-w-[290px]"
           style={{
-            fontSize: '14px',
+            fontSize: '13px',
             lineHeight: 1.8,
             color: 'rgba(30,25,21,0.72)',
           }}
@@ -355,7 +357,7 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
         </p>
 
         {/* IMAGE COMPOSITION */}
-        <div className="mt-10 flex flex-col items-center">
+        <div className="mt-7 flex flex-col items-center">
 
           {/* TOP ROW */}
           <div className="flex gap-3">
@@ -363,7 +365,7 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
               <img
                 src={Menu1}
                 alt=""
-                className="h-[98px] w-[162px] object-cover transition-transform duration-700 hover:scale-[1.04]"
+                className="h-[92px] w-[154px] object-cover transition-transform duration-700 hover:scale-[1.04]"
               />
             </div>
 
@@ -371,29 +373,34 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
               <img
                 src={Menu2}
                 alt=""
-                className="h-[98px] w-[162px] object-cover transition-transform duration-700 hover:scale-[1.04]"
+                className="h-[92px] w-[154px] object-cover transition-transform duration-700 hover:scale-[1.04]"
               />
             </div>
           </div>
 
           {/* BOTTOM IMAGE */}
           <div className="mt-5 overflow-hidden rounded-[8px]">
-            <img
-              src={Menu3}
-              alt=""
-              className="h-[145px] w-[335px] object-cover transition-transform duration-700 hover:scale-[1.04]"
-            />
+              <img
+                src={Menu3}
+                alt=""
+                className="h-[132px] w-[320px] object-cover transition-transform duration-700 hover:scale-[1.04]"
+              />
           </div>
         </div>
 
         {/* SOCIAL ICONS */}
-        <div className="mt-12 flex items-center justify-center gap-8">
+        <div className="mt-9 flex items-center justify-center gap-8">
 
-          {[Instagram, Linkedin, Youtube].map((Icon, index) => (
+          {[
+            { Icon: Instagram, href: 'https://www.instagram.com/ryvive_roots?igsh=aHc1Z3hmMWVheWdl' },
+            { Icon: Linkedin, href: '#' },
+            { Icon: Youtube, href: '#' },
+          ].map(({ Icon, href }, index) => (
             <a
               key={index}
-              href="#"
+              href={href}
               className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-black/10 transition-all duration-300 hover:border-black/20 hover:-translate-y-[1px]"
+              {...(index === 0 ? { target: '_blank', rel: 'noreferrer' } : {})}
             >
               <Icon
                 size={16}
@@ -405,7 +412,7 @@ export function BurgerMenu({ headerText, headerMuted }: { headerText: string; he
         </div>
 
         {/* ADDRESS */}
-        <div className="mt-20 border-t border-black/5 pt-10">
+        <div className="mt-8 border-t border-black/5 pt-6">
 
           <div
             className="text-center"
