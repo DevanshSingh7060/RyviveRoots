@@ -6,7 +6,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CREAM, SAGE } from '../theme';
 
-const footerImage = new URL('../images/FooterImg.JPG.jpeg', import.meta.url).href;
+const footerImage = new URL('../images/FooterImg.jpeg', import.meta.url).href;
 
 gsap.registerPlugin(ScrollTrigger);
 
