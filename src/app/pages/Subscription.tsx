@@ -169,7 +169,7 @@ export default function Subscription() {
 
       {/* MAIN SPLIT */}
       <section data-tone="light" className="px-5 sm:px-8 lg:px-14 pt-10 lg:pt-16 pb-20 lg:pb-32">
-        <div className="max-w-[1400px] mx-auto grid lg:grid-cols-[34%_1fr] gap-10 lg:gap-16">
+        <div className="max-w-[1520px] mx-auto grid lg:grid-cols-[minmax(240px,29%)_minmax(0,71%)] gap-4 lg:gap-5 xl:gap-6">
           {/* LEFT — vertical step rail (mobile + desktop) */}
           <aside className="relative w-full mb-8 lg:sticky lg:top-[100px] self-start">
             <div
@@ -536,7 +536,7 @@ function PlanStep({
         Choose the nourishment plan that fits your lifestyle.
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6 pt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 lg:gap-4 xl:gap-5 pt-4 lg:pt-5">
         {plans.map((p, i) => {
           const isSel = selectedPlan === p.key;
           const duration = durations[p.key] ?? 1;
@@ -553,7 +553,7 @@ function PlanStep({
               }}
               transition={{ delay: i * 0.08, duration: 0.55, ease }}
               whileHover={!isSel ? { y: -4, scale: 1.02 } : undefined}
-              className="relative p-8 lg:p-10 text-left flex flex-col min-h-[440px]"
+              className="relative p-[22px] lg:p-[26px] text-left flex flex-col min-h-[418px]"
               style={{
                 background: isSel ? INK : CREAM_2,
                 color: isSel ? CREAM : INK,
@@ -575,13 +575,13 @@ function PlanStep({
                 Plan
               </div>
               <div className="font-serif mb-2" style={{ fontSize: '32px', fontWeight: 300, lineHeight: 1.1 }}>{p.name}</div>
-              <div style={{ fontSize: '14px', color: isSel ? 'rgba(244,239,230,0.7)' : 'rgba(42,37,32,0.6)', fontStyle: 'italic', marginBottom: '32px' }}>
+              <div style={{ fontSize: '14px', color: isSel ? 'rgba(244,239,230,0.7)' : 'rgba(42,37,32,0.6)', fontStyle: 'italic', marginBottom: '20px' }}>
                 {p.tagline}
               </div>
 
-              <div className="pb-8 mb-8" style={{ borderBottom: `1px solid ${isSel ? 'rgba(244,239,230,0.15)' : 'rgba(42,37,32,0.12)'}` }}>
+              <div className="pb-5 mb-5" style={{ borderBottom: `1px solid ${isSel ? 'rgba(244,239,230,0.15)' : 'rgba(42,37,32,0.12)'}` }}>
                 <div
-                  className="mb-5 inline-flex rounded-full p-1 border relative overflow-hidden"
+                  className="mb-3.5 inline-flex rounded-full p-1 border relative overflow-hidden"
                   style={{
                     borderColor: isSel ? 'rgba(244,239,230,0.14)' : 'rgba(42,37,32,0.12)',
                     background: isSel ? 'rgba(244,239,230,0.05)' : 'rgba(255,255,255,0.38)',
@@ -635,7 +635,7 @@ function PlanStep({
                   >
                     <div className="flex items-baseline gap-2">
                       <span style={{ fontSize: '14px', opacity: 0.55 }}>₹</span>
-                      <span className="font-serif" style={{ fontSize: '44px', fontWeight: 300, letterSpacing: '-0.02em', lineHeight: 1 }}>
+                      <span className="font-serif" style={{ fontSize: '42px', fontWeight: 300, letterSpacing: '-0.02em', lineHeight: 1 }}>
                         {price.toLocaleString('en-IN')}
                       </span>
                     </div>
@@ -646,9 +646,9 @@ function PlanStep({
                 </AnimatePresence>
               </div>
 
-              <ul className="space-y-4 mb-8 flex-1">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 mb-6 flex-1">
                 {p.features.map((f) => (
-                  <li key={f} className="flex items-start gap-4" style={{ fontSize: '14px', lineHeight: 1.6, opacity: 0.9 }}>
+                  <li key={f} className="flex items-start gap-3" style={{ fontSize: '14px', lineHeight: 1.5, opacity: 0.9 }}>
                     <Check size={16} strokeWidth={1.5} style={{ color: isSel ? SAGE : SAGE_DARK, marginTop: '2px', flexShrink: 0 }} />
                     {f}
                   </li>
