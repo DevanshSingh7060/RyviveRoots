@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router';
 import { useLocation } from 'react-router';
 import { Instagram, Linkedin, Youtube, Phone } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CREAM, SAGE } from '../theme';
 
-const footerImage = new URL('../images/Landing-1.jpeg', import.meta.url).href;
+const footerImage = new URL('../images/FooterImg.JPG.jpeg', import.meta.url).href;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,7 +43,7 @@ export function SiteFooter() {
     const ctx = gsap.context(() => {
       // Initial states
       gsap.set(content, { opacity: 0, y: 30 });
-      gsap.set(image, { transformOrigin: 'center center' });
+      
       gsap.set([leftGroup, centerGroup, rightGroup, bottomRow, navItems, contactItems, socialItems, footerMarks].flat().filter(Boolean), { y: 0, willChange: 'transform' });
 
       if (leftGroup) {
@@ -61,7 +62,7 @@ export function SiteFooter() {
         gsap.fromTo(bottomRow, { y: 8 }, { y: -6, ease: 'none', scrollTrigger: { trigger: footer, start: 'top 84%', end: 'bottom top', scrub: 1.05 } });
       }
 
-      gsap.set(image, { yPercent: 0, scale: 1 });
+     
 
       navItems.forEach((item, index) => {
         gsap.fromTo(item, { y: 8 + index * 1.5 }, { y: -6 - index * 1.5, ease: 'none', scrollTrigger: { trigger: footer, start: 'top 90%', end: 'bottom top', scrub: 1.15 } });
@@ -105,22 +106,20 @@ export function SiteFooter() {
   }, []);
 
   return (
-    <footer ref={footerRef} data-tone="light" className="relative overflow-hidden">
+    <footer ref={footerRef} data-tone="light" className="relative ">
       <div className="absolute inset-0 bg-[#0f0c0a]" />
       {/* Static background image */}
-      <div
-        ref={imageRef}
-        className="absolute left-0 right-0 w-full"
-        style={{
-          top: '-35%',
-          bottom: '-35%',
-          backgroundImage: `url(${footerImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          willChange: 'transform',
-        }}
-      />
+    <div
+  ref={imageRef}
+  className="absolute inset-0"
+  style={{
+    backgroundImage: `url(${footerImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: 'fixed',
+  }}
+/>
       <div
         className="absolute inset-0"
         style={{
@@ -155,15 +154,27 @@ export function SiteFooter() {
               <ul className="space-y-3">
                 {['Menu', 'Subscription', 'Story', 'Reservations'].map((item) => (
                   <li key={item} data-footer-nav-item>
-                    <a
-                      href="#"
-                      className="transition-colors"
-                      style={{ color: 'rgba(244,239,230,0.78)', fontSize: '13px', letterSpacing: '0.04em' }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = CREAM)}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(244,239,230,0.78)')}
-                    >
-                      {item}
-                    </a>
+                    {item === 'Story' ? (
+                      <Link
+                        to="/story"
+                        className="transition-colors"
+                        style={{ color: 'rgba(244,239,230,0.78)', fontSize: '13px', letterSpacing: '0.04em' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = CREAM)}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(244,239,230,0.78)')}
+                      >
+                        {item}
+                      </Link>
+                    ) : (
+                      <a
+                        href="#"
+                        className="transition-colors"
+                        style={{ color: 'rgba(244,239,230,0.78)', fontSize: '13px', letterSpacing: '0.04em' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = CREAM)}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(244,239,230,0.78)')}
+                      >
+                        {item}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -183,7 +194,7 @@ export function SiteFooter() {
 
           <div data-footer-bottom className="mt-16 pt-6 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between" style={{ borderTop: '1px solid rgba(244,239,230,0.16)' }}>
             <div data-footer-mark style={{ color: 'rgba(244,239,230,0.62)', fontSize: '10px', letterSpacing: '0.26em', textTransform: 'uppercase' }}>
-              ©️ 2026 Ryvive Roots — Mumbai
+              © 2026 Ryvive Roots — Mumbai
             </div>
             <div className="flex items-center gap-5">
               {[Instagram, Linkedin, Youtube, Phone].map((Icon, i) => (
