@@ -17,7 +17,12 @@ import {
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { CREAM, CREAM_2, DARK, DARK_2, INK, SAGE, SAGE_DARK } from '../theme';
 
-const SubscriptionHeader = new URL('../images/Subscription-2.JPG', import.meta.url).href;
+import landing1 from '../images/Landing-1.jpeg';
+import landing2 from '../images/Landing-2.jpeg';
+import landing3 from '../images/Landing-3.jpeg';
+import landing4 from '../images/Landing-4.jpeg';
+
+const SubscriptionHeader = new URL('../images/Landing-3.jpeg', import.meta.url).href;
 
 type DurationMonths = 1 | 3;
 
@@ -318,14 +323,29 @@ export default function Subscription() {
       <section
         className="px-8 lg:px-14 py-20 lg:py-24 relative overflow-hidden"
         style={{
-          background: CREAM,
+          background: CREAM_2,
         }}
         data-tone="light"
       >
+        {/* Subtle Luxury Visual Overlays and Gradients */}
         <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(28,24,20,0.03) 0%, rgba(28,24,20,0.01) 30%, rgba(28,24,20,0.05) 100%)' }} />
-          <div style={{ position: 'absolute', left: '-10%', top: '-6%', width: '34%', height: '64%', background: 'radial-gradient(closest-side, rgba(139,149,121,0.10), transparent 60%)', filter: 'blur(56px)', opacity: 0.8 }} />
-          <div style={{ position: 'absolute', right: '-10%', bottom: '-10%', width: '34%', height: '64%', background: 'radial-gradient(closest-side, rgba(28,24,20,0.07), transparent 62%)', filter: 'blur(56px)', opacity: 0.75 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(28,24,20,0.04) 0%, rgba(28,24,20,0.01) 30%, rgba(28,24,20,0.05) 100%)' }} />
+          <div style={{ position: 'absolute', left: '-10%', top: '-6%', width: '34%', height: '64%', background: 'radial-gradient(closest-side, rgba(139,149,121,0.14), transparent 60%)', filter: 'blur(56px)', opacity: 0.95 }} />
+          <div style={{ position: 'absolute', right: '-10%', bottom: '-10%', width: '34%', height: '64%', background: 'radial-gradient(closest-side, rgba(28,24,20,0.08), transparent 62%)', filter: 'blur(56px)', opacity: 0.8 }} />
+          
+          {/* Low-opacity Blurred Food Accents */}
+          <div className="absolute inset-0 opacity-[0.025] select-none" style={{ mixBlendMode: 'multiply' }}>
+            <img 
+              src={landing2} 
+              alt="" 
+              className="absolute -left-[10%] -bottom-[6%] w-[38%] aspect-square object-cover rounded-full filter blur-[40px] saturate-[0.8]" 
+            />
+            <img 
+              src={landing3} 
+              alt="" 
+              className="absolute -right-[10%] -top-[6%] w-[38%] aspect-square object-cover rounded-full filter blur-[40px] saturate-[0.8]" 
+            />
+          </div>
         </div>
 
         <div className="max-w-[1400px] mx-auto relative z-10">
@@ -357,14 +377,15 @@ export default function Subscription() {
           </div>
 
           <div className="relative">
+            {/* Soft Premium Connecting Line Glow */}
             <div
               className="hidden lg:block absolute left-[10%] right-[10%] top-10 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(28,24,20,0.14) 14%, rgba(107,117,96,0.24) 50%, rgba(28,24,20,0.14) 86%, transparent 100%)' }}
+              style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(107,117,96,0.15) 15%, rgba(139,149,121,0.4) 50%, rgba(107,117,96,0.15) 85%, transparent 100%)' }}
             />
             <div className="hidden lg:flex absolute left-[13%] right-[13%] top-[34px] items-center justify-between pointer-events-none">
-              <span style={{ width: '10px', height: '10px', borderRadius: '999px', background: SAGE, opacity: 0.42 }} />
-              <span style={{ width: '10px', height: '10px', borderRadius: '999px', background: SAGE_DARK, opacity: 0.42 }} />
-              <span style={{ width: '10px', height: '10px', borderRadius: '999px', background: SAGE, opacity: 0.42 }} />
+              <span style={{ width: '10px', height: '10px', borderRadius: '999px', background: SAGE, opacity: 0.55, boxShadow: '0 0 8px rgba(139,149,121,0.4)' }} />
+              <span style={{ width: '10px', height: '10px', borderRadius: '999px', background: SAGE_DARK, opacity: 0.55, boxShadow: '0 0 8px rgba(107,117,96,0.4)' }} />
+              <span style={{ width: '10px', height: '10px', borderRadius: '999px', background: SAGE, opacity: 0.55, boxShadow: '0 0 8px rgba(139,149,121,0.4)' }} />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 pt-4">
@@ -393,24 +414,29 @@ export default function Subscription() {
                 return (
                   <motion.div
                     key={index}
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    whileTap={{ y: -4, scale: 1.015 }}
-                    transition={{ duration: 0.5, ease }}
+                    whileHover={{ 
+                      y: -8, 
+                      scale: 1.015,
+                      boxShadow: '0 25px 50px -20px rgba(14,41,27,0.18), 0 0 0 1px rgba(255,255,255,0.95) inset',
+                      borderColor: 'rgba(107,117,96,0.35)'
+                    }}
+                    whileTap={{ y: -4, scale: 1.01 }}
+                    transition={{ duration: 0.45, ease }}
                     className="relative overflow-hidden"
                     style={{
                       minHeight: '300px',
                       padding: '24px 22px 22px',
                       borderRadius: '14px',
-                      background: 'rgba(248,244,237,0.96)',
-                      border: '1px solid rgba(28,24,20,0.10)',
-                      boxShadow: '0 18px 34px -26px rgba(28,24,20,0.24), 0 0 0 1px rgba(255,255,255,0.4) inset',
+                      background: 'rgba(248,244,237,0.95)',
+                      border: '1px solid rgba(107,117,96,0.16)',
+                      boxShadow: '0 20px 45px -24px rgba(14,41,27,0.12), 0 0 0 1px rgba(255,255,255,0.7) inset',
                       backdropFilter: 'blur(8px)',
                       transitionProperty: 'transform, box-shadow, border-color',
                     }}
                   >
                     <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.06) 28%, rgba(28,24,20,0.02) 100%)' }} />
-                      <div style={{ position: 'absolute', right: '-12%', top: '-18%', width: '58%', height: '72%', background: 'radial-gradient(closest-side, rgba(139,149,121,0.13), transparent 68%)', filter: 'blur(26px)', opacity: 0.7 }} />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.06) 28%, rgba(28,24,20,0.02) 100%)' }} />
+                      <div style={{ position: 'absolute', right: '-12%', top: '-18%', width: '58%', height: '72%', background: 'radial-gradient(closest-side, rgba(139,149,121,0.15), transparent 68%)', filter: 'blur(26px)', opacity: 0.75 }} />
                     </div>
 
                     <div className="relative z-10 flex h-full flex-col">
@@ -422,7 +448,7 @@ export default function Subscription() {
                               fontSize: 'clamp(42px, 5.8vw, 72px)',
                               lineHeight: 0.9,
                               color: SAGE_DARK,
-                              opacity: 0.18,
+                              opacity: 0.22,
                               letterSpacing: '-0.04em',
                             }}
                           >
@@ -434,19 +460,20 @@ export default function Subscription() {
                               width: '48px',
                               height: '1px',
                               background: `linear-gradient(90deg, ${SAGE} 0%, ${SAGE_DARK} 100%)`,
-                              opacity: 0.6,
+                              opacity: 0.7,
                             }}
                           />
                         </div>
 
+                        {/* Refined Icon Visibility with SAGE colors */}
                         <div
-                          className="flex items-center justify-center"
+                          className="flex items-center justify-center transition-colors duration-300"
                           style={{
                             width: '54px',
                             height: '54px',
                             borderRadius: '999px',
-                            background: 'rgba(28,24,20,0.035)',
-                            border: '1px solid rgba(28,24,20,0.08)',
+                            background: 'rgba(107,117,96,0.06)',
+                            border: '1px solid rgba(107,117,96,0.15)',
                           }}
                         >
                           <Icon size={21} strokeWidth={1.35} color={SAGE_DARK} />
@@ -468,7 +495,7 @@ export default function Subscription() {
 
                       <p
                         style={{
-                          color: 'rgba(28,24,20,0.74)',
+                          color: 'rgba(28,24,20,0.76)',
                           fontSize: '15px',
                           lineHeight: 1.8,
                           marginBottom: '22px',
@@ -528,43 +555,63 @@ function PlanStep({
   };
 
   return (
-    <div>
-      <h2 className="font-serif mb-3" style={{ fontSize: 'clamp(28px, 3.4vw, 40px)', color: INK, fontWeight: 300, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
-        Select your <em style={{ fontStyle: 'italic' }}>plan.</em>
-      </h2>
-      <p className="mb-10" style={{ fontSize: '14px', color: 'rgba(42,37,32,0.65)', lineHeight: 1.8 }}>
-        Choose the nourishment plan that fits your lifestyle.
-      </p>
+    <div className="relative">
+      {/* Soft Blurred Organic / Wellness Background Overlays */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-[0.035] select-none" style={{ mixBlendMode: 'multiply' }}>
+        <img 
+          src={landing1} 
+          alt="" 
+          className="absolute -left-[12%] -top-[8%] w-[42%] aspect-square object-cover rounded-full filter blur-[32px] saturate-[0.8]" 
+        />
+        <img 
+          src={landing4} 
+          alt="" 
+          className="absolute -right-[12%] -bottom-[8%] w-[42%] aspect-square object-cover rounded-full filter blur-[32px] saturate-[0.8]" 
+        />
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 lg:gap-4 xl:gap-5 pt-4 lg:pt-5">
-        {plans.map((p, i) => {
-          const isSel = selectedPlan === p.key;
-          const duration = durations[p.key] ?? 1;
-          const price = p.prices[duration];
+      <div className="relative z-10">
+        <h2 className="font-serif mb-3" style={{ fontSize: 'clamp(28px, 3.4vw, 40px)', color: INK, fontWeight: 300, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+          Select your <em style={{ fontStyle: 'italic' }}>plan.</em>
+        </h2>
+        <p className="mb-10" style={{ fontSize: '14px', color: 'rgba(42,37,32,0.65)', lineHeight: 1.8 }}>
+          Choose the nourishment plan that fits your lifestyle.
+        </p>
 
-          return (
-            <motion.div
-              key={p.key}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{
-                opacity: 1,
-                y: isSel ? -8 : 0,
-                scale: isSel ? 1.03 : 1,
-              }}
-              transition={{ delay: i * 0.08, duration: 0.55, ease }}
-              whileHover={!isSel ? { y: -4, scale: 1.02 } : undefined}
-              className="relative p-[22px] lg:p-[26px] text-left flex flex-col min-h-[418px]"
-              style={{
-                background: isSel ? INK : CREAM_2,
-                color: isSel ? CREAM : INK,
-                border: `1.5px solid ${isSel ? SAGE : (p.popular ? SAGE_DARK : 'rgba(42,37,32,0.1)')}`,
-                borderRadius: '3px',
-                boxShadow: isSel
-                  ? '0 30px 60px -20px rgba(42,37,32,0.3), 0 0 0 4px rgba(139,149,121,0.15)'
-                  : '0 4px 20px -8px rgba(42,37,32,0.06)',
-                transformOrigin: 'center bottom',
-              }}
-            >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 lg:gap-4 xl:gap-5 pt-4 lg:pt-5">
+          {plans.map((p, i) => {
+            const isSel = selectedPlan === p.key;
+            const duration = durations[p.key] ?? 1;
+            const price = p.prices[duration];
+
+            return (
+              <motion.div
+                key={p.key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{
+                  opacity: 1,
+                  y: isSel ? -8 : 0,
+                  scale: isSel ? 1.03 : 1,
+                }}
+                transition={{ delay: i * 0.08, duration: 0.55, ease }}
+                whileHover={!isSel ? { 
+                  y: -5, 
+                  scale: 1.015,
+                  boxShadow: '0 20px 40px -16px rgba(42,37,32,0.12), 0 0 0 1px rgba(255,255,255,0.7) inset',
+                  borderColor: 'rgba(107,117,96,0.3)'
+                } : undefined}
+                className="relative p-[22px] lg:p-[26px] text-left flex flex-col min-h-[418px] backdrop-blur-[6px]"
+                style={{
+                  background: isSel ? INK : 'rgba(244, 239, 230, 0.65)',
+                  color: isSel ? CREAM : INK,
+                  border: `1.5px solid ${isSel ? SAGE : (p.popular ? SAGE_DARK : 'rgba(42,37,32,0.08)')}`,
+                  borderRadius: '3px',
+                  boxShadow: isSel
+                    ? '0 35px 70px -15px rgba(14,41,27,0.38), 0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 0 4px rgba(139,149,121,0.15)'
+                    : '0 8px 30px -16px rgba(42,37,32,0.08), 0 0 0 1px rgba(255,255,255,0.65) inset',
+                  transformOrigin: 'center bottom',
+                }}
+              >
               {p.popular && (
                 <div className="absolute -top-3.5 left-8 px-4 py-1.5 tracking-[0.3em] uppercase z-10"
                   style={{ fontSize: '9px', background: SAGE, color: DARK_2, borderRadius: '2px', fontWeight: 500 }}>
@@ -675,6 +722,7 @@ function PlanStep({
         })}
       </div>
     </div>
+  </div>
   );
 }
 
