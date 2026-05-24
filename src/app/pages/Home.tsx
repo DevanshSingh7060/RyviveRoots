@@ -1,55 +1,191 @@
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router';
-import { Check } from 'lucide-react';
-import heroImage from "@/app/images/Homepage bg.png";
+import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+// Images
+import heroImage from "@/app/images/Avocado Shake.JPG";
 import landing1 from "@/app/images/Landing-1.jpeg";
 import landing2 from "@/app/images/Landing-2.jpeg";
 import landing3 from "@/app/images/Landing-3.jpeg";
 import landing4 from "@/app/images/Landing-4.jpeg";
 import story1 from "@/app/images/Story-1.JPG";
+import menu1 from "@/app/images/Menu-1.jpeg";
+import menu2 from "@/app/images/Menu-2.jpeg";
+import menu4 from "@/app/images/Menu-4.jpeg";
+
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { CREAM, CREAM_2, DARK, DARK_2, INK, SAGE, SAGE_DARK } from '../theme';
-import { homeSignatureCards } from '../content/menuContent';
+
+// Testimonials Data exactly as requested
+const testimonials = [
+  {
+    name: "Monika Korgaonkar",
+    text: "One of the best dining experiences I’ve had. The ingredients were fresh, the flavors were perfect, and the presentation was excellent. Highly recommended for food lovers."
+  },
+  {
+    name: "Dileep Kumar",
+    text: "Tried this place for the first time today and honestly didn’t expect healthy food to taste this good. Everything was fresh and nicely seasoned. Definitely coming back."
+  },
+  {
+    name: "Deepak World Vacation",
+    text: "Best healthy food option in Dombivli right now. Clean packaging, good portions, and consistent taste. Been ordering for 3 weeks straight."
+  },
+  {
+    name: "Santosh Gupta",
+    text: "I Tried the immunity booster and libido booster. I feel energetic and it tastes so good. Thank you Ryvive Roots for giving me such a good experience and ambience is so good."
+  },
+  {
+    name: "Rajan Jadhav",
+    text: "Loved the detox juices here. Very refreshing and natural taste."
+  },
+  {
+    name: "Afroza Khan",
+    text: "Loved the detox juices here. Very refreshing and natural taste."
+  },
+  {
+    name: "Shashi Shetty",
+    text: "Excellent ambience and soulful food."
+  },
+  {
+    name: "Vishal Shetty",
+    text: "This place is a hidden gem! If you guys are into conscious and healthy eating, look no further."
+  },
+  {
+    name: "Sonali Ovhal",
+    text: "It's outstanding awesome and healthy please try, be fit stay healthy."
+  },
+  {
+    name: "The Alok Tamhankar Show",
+    text: "A super healthy alternative to unwanted junk food... Bon appetite... Must try"
+  }
+];
+
+// 8 Categories Data mapped to original card visuals
+const categories = [
+  { title: "Sandwiches", desc: "Luxury artisan grilled sourdoughs with custom herb spreads", price: "Grill Series", image: menu1 },
+  { title: "Salads", desc: "Organic garden beds with microgreens & house seed toppings", price: "House Bowls", image: landing1 },
+  { title: "Wraps", desc: "Antioxidant wheat rolls with crisp fresh vegetables", price: "Fresh Rolls", image: landing2 },
+  { title: "Pasta", desc: "Light zoodle variations & high-fiber organic pasta bowls", price: "Zoodles", image: menu2 },
+  { title: "Soups", desc: "Velvety warm broths crafted for digestion and vitality", price: "Warm Bowls", image: landing3 },
+  { title: "Juices", desc: "Cold-pressed elixirs & premium functional wellness shots", price: "Elixirs", image: heroImage },
+  { title: "Healthy Chaat", desc: "Reimagined classics utilizing sweet potato & citrus vinaigrettes", price: "Refined Street", image: landing4 },
+  { title: "Protein Bowls", desc: "Macro-balanced energy reserves utilizing plant clean protein", price: "Clean Protein", image: menu4 }
+];
 
 export default function Home() {
+  // Testimonial sliding state
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [visibleCards, setVisibleCards] = useState(2);
+
+  // Dynamic visible card calculation to preserve responsive original layouts
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setVisibleCards(2); // exactly matches original md:grid-cols-2 column count
+      } else {
+        setVisibleCards(1);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize(); // trigger initially
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Clamp sliding index on resize
+  useEffect(() => {
+    setCurrentIndex((prev) => {
+      const maxIndex = testimonials.length - visibleCards;
+      return Math.min(prev, maxIndex);
+    });
+  }, [visibleCards]);
+
+  // Autoplay Slider - Slides one by one with a 4000ms delay
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => {
+        const maxIndex = testimonials.length - visibleCards;
+        return prev >= maxIndex ? 0 : prev + 1;
+      });
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isHovered, visibleCards]);
+
+  const handleNextTestimonial = () => {
+    setCurrentIndex((prev) => {
+      const maxIndex = testimonials.length - visibleCards;
+      return prev >= maxIndex ? 0 : prev + 1;
+    });
+  };
+
+  const handlePrevTestimonial = () => {
+    setCurrentIndex((prev) => {
+      const maxIndex = testimonials.length - visibleCards;
+      return prev === 0 ? maxIndex : prev - 1;
+    });
+  };
+
   return (
     <>
-      {/* HERO — DARK */}
+      {/* HERO — DARK (ORIGINAL VISUAL DESIGN PRESERVED EXACTLY) */}
       <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: DARK_2 }}>
         <div className="absolute inset-0">
           <ImageWithFallback
-  src={heroImage}
-  alt="Hero"
-  className="w-full h-full object-cover"
-/>
+            src={heroImage}
+            alt="Hero"
+            className="w-full h-full object-cover"
+          />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(20,17,15,0.55) 0%, rgba(20,17,15,0.4) 50%, rgba(20,17,15,0.95) 100%)' }} />
         </div>
 
         <div className="relative z-10 max-w-[1400px] mx-auto px-8 lg:px-14 w-full pt-32">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }} className="max-w-3xl">
+            {/* Eyebrow Text */}
             <div className="tracking-[0.42em] uppercase mb-10 flex items-center gap-4" style={{ fontSize: '11px', color: SAGE }}>
               <span style={{ width: '36px', height: '1px', background: SAGE, display: 'inline-block' }} />
-              A Mumbai Wellness Atelier
+              CRAFTED FOR BALANCE, FRESHNESS, AND FLAVOUR.
             </div>
-            <h1 className="font-serif mb-10" style={{ fontSize: 'clamp(42px, 6.2vw, 84px)', lineHeight: 1.04, letterSpacing: '-0.012em', color: CREAM, fontWeight: 300 }}>
-              Nourishment,<br />
-              <em style={{ fontStyle: 'italic', color: SAGE }}>quietly</em> considered.
+            
+            {/* Main Heading */}
+            <h1 className="font-serif mb-10 text-left" style={{ fontSize: 'clamp(42px, 6.2vw, 84px)', lineHeight: 1.04, letterSpacing: '-0.012em', color: CREAM, fontWeight: 300 }}>
+              Welcome to<br />
+              <em style={{ fontStyle: 'italic', color: SAGE }}>Ryvive Roots</em>
             </h1>
-            <p className="mb-14 max-w-xl" style={{ fontSize: '15px', lineHeight: 1.85, color: 'rgba(244,239,230,0.65)' }}>
-              Honest food crafted from clean, seasonal ingredients — for a slower, more deliberate way of living well.
+            
+            {/* Subheading */}
+            <p className="mb-14 max-w-xl text-left" style={{ fontSize: '15px', lineHeight: 1.85, color: 'rgba(244,239,230,0.65)' }}>
+              Live better, relive your natural energy, and believe in the power of authentic food.
             </p>
+            
+            {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-8">
               <Link to="/menu"
                 className="px-8 py-3.5 tracking-[0.22em] uppercase transition-all duration-300"
                 style={{ fontSize: '11px', border: `1px solid ${CREAM}`, color: CREAM, borderRadius: '1px' }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = INK; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
-                Discover the Menu
+                Explore Menu
               </Link>
               <Link to="/subscription" className="tracking-[0.22em] uppercase transition-colors" style={{ fontSize: '11px', color: 'rgba(244,239,230,0.7)' }}>
-                Daily Subscription →
+                Start Subscription →
               </Link>
             </div>
+
+            {/* Supporting & Highlight Creed (Integrated elegantly inside the layout grid) */}
+            <div className="mt-16 pt-8 border-t border-[rgba(244,239,230,0.12)] flex flex-wrap justify-between gap-6 max-w-xl items-end">
+              <div>
+                <span className="tracking-[0.25em] uppercase text-[9px] block mb-1" style={{ color: SAGE }}>Supporting Ritual</span>
+                <p className="font-serif italic text-base text-left" style={{ color: CREAM }}>Where Wellness Begin</p>
+              </div>
+              <div className="tracking-[0.22em] uppercase text-[11px] flex flex-col gap-1 font-bold text-left" style={{ color: CREAM }}>
+                <span>REAL FOOD.</span>
+                <span>REAL INGREDIENTS.</span>
+                <span>REAL CHANGE.</span>
+              </div>
+            </div>
+
           </motion.div>
         </div>
 
@@ -60,28 +196,37 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* INTRO — LIGHT */}
-      <section data-tone="light" className="pt-20 pb-12 lg:pt-28 lg:pb-16" style={{ background: CREAM }}>
+      {/* 2. WHAT WE SERVE SECTION — LIGHT (ORIGINAL VISUAL STYLE PRESERVED) */}
+      <section data-tone="light" className="pt-20 pb-16 lg:pt-28 lg:pb-20" style={{ background: CREAM }}>
         <div className="max-w-[1100px] mx-auto px-8 lg:px-14 text-center">
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9 }}>
-            <div className="tracking-[0.42em] uppercase mb-8" style={{ fontSize: '11px', color: SAGE_DARK }}>— Est. Mumbai</div>
-            <h2 className="font-serif mx-auto" style={{ fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1.4, color: INK, fontWeight: 300, maxWidth: '900px' }}>
-              We believe in food that arrives without performance — composed of clean ingredients, prepared the same morning, and served with{' '}
-              <em style={{ fontStyle: 'italic', color: SAGE_DARK }}>uncommon care</em>.
+            {/* Section Label */}
+            <div className="tracking-[0.42em] uppercase mb-8" style={{ fontSize: '11px', color: SAGE_DARK }}>WHAT WE SERVE</div>
+            
+            {/* Main Heading */}
+            <h2 className="font-serif mx-auto mb-8" style={{ fontSize: 'clamp(28px, 3.4vw, 44px)', lineHeight: 1.2, color: INK, fontWeight: 300, maxWidth: '900px' }}>
+              NOURISHMENT<br />
+              WITHOUT<br />
+              <em style={{ fontStyle: 'italic', color: SAGE_DARK }}>COMPROMISE</em>
             </h2>
+
+            {/* Paragraph Text */}
+            <p className="mx-auto max-w-2xl text-[14px]" style={{ lineHeight: 1.85, color: 'rgba(42,37,32,0.78)' }}>
+              At Ryvive Roots, nothing is accidental. Every bowl, every wrap, every juice is built around what your body genuinely needs — clean proteins, natural boosters, real vegetables, zero compromise. For those who believe that living well begins with eating well.
+            </p>
           </motion.div>
         </div>
       </section>
 
-      {/* SIGNATURE DISHES — LIGHT */}
+      {/* 3. FEATURED CATEGORIES SECTION — LIGHT (ORIGINAL CARD STYLING PRESERVED) */}
       <section data-tone="light" className="pt-12 pb-24 lg:pt-16 lg:pb-32" style={{ background: CREAM }}>
         <div className="max-w-[1400px] mx-auto px-8 lg:px-14">
           <div className="flex items-end justify-between mb-20 flex-wrap gap-8">
             <div>
               <div className="tracking-[0.42em] uppercase mb-6" style={{ fontSize: '11px', color: SAGE_DARK }}>— Signature</div>
-              <h2 className="font-serif" style={{ fontSize: 'clamp(34px, 4.2vw, 56px)', lineHeight: 1.05, color: INK, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                A few of our<br />
-                <em style={{ fontStyle: 'italic' }}>quiet favourites.</em>
+              <h2 className="font-serif text-left" style={{ fontSize: 'clamp(34px, 4.2vw, 56px)', lineHeight: 1.05, color: INK, fontWeight: 300, letterSpacing: '-0.01em' }}>
+                Our signature<br />
+                <em style={{ fontStyle: 'italic' }}>categories.</em>
               </h2>
             </div>
             <Link to="/menu" className="tracking-[0.22em] uppercase pb-1" style={{ fontSize: '11px', color: INK, borderBottom: `1px solid ${INK}` }}>
@@ -89,67 +234,67 @@ export default function Home() {
             </Link>
           </div>
 
+          {/* Existing card designs and spacing. Loops the 8 requested categories. */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-  {homeSignatureCards.map((item, i) => (
-    <motion.div
-      key={i}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ delay: i * 0.08, duration: 0.7 }}
-      className="group cursor-pointer"
-    >
-      <div
-        className="relative overflow-hidden mb-7"
-        style={{ aspectRatio: '3/4' }}
-      >
-        <ImageWithFallback
-          src={[landing1, landing2, landing3, landing4][i]}
-          alt={item.imageLabel}
-          className="w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105"
-        />
-      </div>
+            {categories.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ delay: (i % 4) * 0.08, duration: 0.7 }}
+                className="group cursor-pointer text-left"
+              >
+                <div
+                  className="relative overflow-hidden mb-7"
+                  style={{ aspectRatio: '3/4' }}
+                >
+                  <ImageWithFallback
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105"
+                  />
+                </div>
 
-      <div className="flex items-baseline justify-between mb-2 gap-4">
-        <h3
-          className="font-serif"
-          style={{ fontSize: '20px', color: INK, fontWeight: 400 }}
-        >
-          {item.title}
-        </h3>
+                <div className="flex items-baseline justify-between mb-2 gap-4">
+                  <h3
+                    className="font-serif"
+                    style={{ fontSize: '20px', color: INK, fontWeight: 400 }}
+                  >
+                    {item.title}
+                  </h3>
 
-        <span
-          style={{
-            fontSize: '13px',
-            color: SAGE_DARK,
-            letterSpacing: '0.05em'
-          }}
-        >
-          {item.price}
-        </span>
-      </div>
+                  <span
+                    style={{
+                      fontSize: '13px',
+                      color: SAGE_DARK,
+                      letterSpacing: '0.05em'
+                    }}
+                  >
+                    {item.price}
+                  </span>
+                </div>
 
-      <p
-        style={{
-          fontSize: '13px',
-          color: 'rgba(42,37,32,0.6)',
-          lineHeight: 1.7
-        }}
-      >
-        {item.description}
-      </p>
-    </motion.div>
-  ))}
-</div>
+                <p
+                  style={{
+                    fontSize: '13px',
+                    color: 'rgba(42,37,32,0.6)',
+                    lineHeight: 1.7
+                  }}
+                >
+                  {item.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* PHILOSOPHY — DARK */}
+      {/* 4. ABOUT / PHILOSOPHY SECTION — DARK (ORIGINAL VISUAL STYLE PRESERVED) */}
       <section id="story" className="py-32 lg:py-44" style={{ background: DARK }}>
         <div className="max-w-[1300px] mx-auto px-8 lg:px-14">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9 }} className="overflow-hidden" style={{ aspectRatio: '4/5' }}>
-              image: story1,
               <ImageWithFallback
                 src={story1}
                 alt="Carefully plated food"
@@ -158,16 +303,15 @@ export default function Home() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, delay: 0.15 }}>
-              <div className="tracking-[0.42em] uppercase mb-6" style={{ fontSize: '11px', color: SAGE }}>— Philosophy</div>
-              <h2 className="font-serif mb-12" style={{ fontSize: 'clamp(32px, 3.8vw, 50px)', lineHeight: 1.1, color: CREAM, fontWeight: 300 }}>
+              <div className="tracking-[0.42em] uppercase mb-6 text-left" style={{ fontSize: '11px', color: SAGE }}>— Philosophy</div>
+              <h2 className="font-serif mb-12 text-left" style={{ fontSize: 'clamp(32px, 3.8vw, 50px)', lineHeight: 1.1, color: CREAM, fontWeight: 300 }}>
                 Real food.<br />
                 <em style={{ fontStyle: 'italic' }}>Real intention.</em>
               </h2>
-              <p style={{ fontSize: '15px', color: 'rgba(244,239,230,0.65)', lineHeight: 1.85, marginBottom: '24px', maxWidth: '480px' }}>
-                Wellness, we believe, begins quietly — in what you choose to eat, and in the care taken to prepare it. Every plate is sourced from trusted farms across India and made the same morning.
-              </p>
-              <p style={{ fontSize: '15px', color: 'rgba(244,239,230,0.65)', lineHeight: 1.85, marginBottom: '48px', maxWidth: '480px' }}>
-                No shortcuts. No compromises. Only honest nourishment, considered to the last detail.
+              
+              {/* PDF Copy Paragraph */}
+              <p className="text-left" style={{ fontSize: '15px', color: 'rgba(244,239,230,0.72)', lineHeight: 1.85, marginBottom: '48px', maxWidth: '480px' }}>
+                “At Ryvive Roots, nothing is accidental. From sandwiches and salads to wraps and pasta, soups and juices to reimagined chaat every dish is built around what your body genuinely needs. Clean proteins, fresh vegetables, real ingredients, zero compromise.”
               </p>
 
               <div className="grid grid-cols-3 gap-8 mb-12 pt-10" style={{ borderTop: '1px solid rgba(244,239,230,0.15)' }}>
@@ -176,7 +320,7 @@ export default function Home() {
                   { label: 'Preservatives', v: '00', s: '%' },
                   { label: 'Daily Prep', v: '24', s: 'h' },
                 ].map((stat, i) => (
-                  <div key={i}>
+                  <div key={i} className="text-left">
                     <div className="font-serif mb-2" style={{ fontSize: '34px', color: CREAM, fontWeight: 300 }}>
                       {stat.v}<span style={{ color: SAGE, fontSize: '18px' }}>{stat.s}</span>
                     </div>
@@ -185,137 +329,167 @@ export default function Home() {
                 ))}
               </div>
 
-
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS — LIGHT */}
-      <section data-tone="light" className="py-32 lg:py-40" style={{ background: CREAM_2 }}>
+      {/* 5. TESTIMONIALS / CLIENT DIARIES — LIGHT CAROUSEL (ORIGINAL CARD STYLING PRESERVED) */}
+      <section 
+        data-tone="light" 
+        className="py-32 lg:py-40 relative overflow-hidden" 
+        style={{ background: CREAM_2 }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className="max-w-[1100px] mx-auto px-8 lg:px-14">
-          <div className="text-center mb-20">
+          {/* Section Header */}
+          <div className="text-center mb-20 relative">
             <div className="tracking-[0.42em] uppercase mb-6" style={{ fontSize: '11px', color: SAGE_DARK }}>— Voices</div>
             <h2 className="font-serif" style={{ fontSize: 'clamp(30px, 3.5vw, 46px)', lineHeight: 1.1, color: INK, fontWeight: 300 }}>
-              Words from <em style={{ fontStyle: 'italic' }}>our table.</em>
+              CLIENT DIARIES
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
-            {[
-              { q: 'A quiet alternative to the noise of modern dining. The ingredients speak for themselves — this is what considered wellness looks like.', a: 'The Alok Tamhankar Show', r: 'Mumbai' },
-              { q: 'Ryvive Roots has reshaped my mornings. Each meal is an act of care, and the flavours linger for hours.', a: 'Priya Sharma', r: 'Wellness Coach' },
-            ].map((t, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15, duration: 0.8 }}>
-                <div className="font-serif mb-8" style={{ fontSize: '22px', lineHeight: 1.6, color: INK, fontWeight: 300, fontStyle: 'italic' }}>“{t.q}”</div>
-                <div className="pt-6" style={{ borderTop: '1px solid rgba(42,37,32,0.15)' }}>
-                  <div style={{ fontSize: '13px', color: INK, letterSpacing: '0.04em' }}>{t.a}</div>
-                  <div className="tracking-[0.22em] uppercase mt-1" style={{ fontSize: '10px', color: 'rgba(42,37,32,0.55)' }}>{t.r}</div>
+          {/* Testimonials Carousel Track Container with swipe controls */}
+          <div className="relative w-full overflow-hidden py-4">
+            <motion.div 
+              className="flex gap-12 items-stretch"
+              animate={{ x: `calc(-${currentIndex} * (100% + 48px) / ${visibleCards})` }}
+              transition={{ type: "spring", stiffness: 90, damping: 18 }}
+              onPanEnd={(event, info) => {
+                const threshold = 50;
+                if (info.offset.x < -threshold) {
+                  handleNextTestimonial();
+                } else if (info.offset.x > threshold) {
+                  handlePrevTestimonial();
+                }
+              }}
+            >
+              {testimonials.map((t, idx) => (
+                <div 
+                  key={idx}
+                  className="flex-shrink-0 flex flex-col justify-between text-left"
+                  style={{
+                    width: `calc((100% - ${(visibleCards - 1) * 48}px) / ${visibleCards})`,
+                  }}
+                >
+                  {/* Testimonial Quote Text with Original Styling */}
+                  <div 
+                    className="font-serif mb-8" 
+                    style={{ fontSize: '22px', lineHeight: 1.6, color: INK, fontWeight: 300, fontStyle: 'italic' }}
+                  >
+                    “{t.text}”
+                  </div>
+                  
+                  {/* Testimonial Divider & Client Name */}
+                  <div className="pt-6" style={{ borderTop: '1px solid rgba(42,37,32,0.15)' }}>
+                    <div style={{ fontSize: '13px', color: INK, letterSpacing: '0.04em', fontWeight: 600 }}>{t.name}</div>
+                    <div className="tracking-[0.22em] uppercase mt-1" style={{ fontSize: '10px', color: 'rgba(42,37,32,0.55)' }}>Verified Client</div>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              ))}
+            </motion.div>
           </div>
+
+          {/* Left/Right Navigation and Autoplay Indicators */}
+          <div className="flex items-center justify-center gap-6 mt-12">
+            {/* Left Glassmorphism Arrow Button */}
+            <button 
+              onClick={handlePrevTestimonial}
+              className="p-3 rounded-full border transition-all duration-300 group cursor-pointer"
+              style={{
+                borderColor: 'rgba(42, 37, 32, 0.15)',
+                background: 'rgba(42, 37, 32, 0.01)',
+                backdropFilter: 'blur(8px)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(42, 37, 32, 0.05)';
+                e.currentTarget.style.borderColor = 'rgba(42, 37, 32, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(42, 37, 32, 0.01)';
+                e.currentTarget.style.borderColor = 'rgba(42, 37, 32, 0.15)';
+              }}
+            >
+              <ChevronLeft size={16} style={{ color: INK }} />
+            </button>
+            
+            {/* Dynamic Slider Pagination Dots */}
+            <div className="flex items-center gap-2">
+              {Array.from({ length: testimonials.length - visibleCards + 1 }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className="h-1.5 rounded-full transition-all duration-500 cursor-pointer"
+                  style={{ 
+                    width: currentIndex === index ? '18px' : '6px',
+                    background: currentIndex === index ? SAGE_DARK : 'rgba(42, 37, 32, 0.15)' 
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Right Glassmorphism Arrow Button */}
+            <button 
+              onClick={handleNextTestimonial}
+              className="p-3 rounded-full border transition-all duration-300 group cursor-pointer"
+              style={{
+                borderColor: 'rgba(42, 37, 32, 0.15)',
+                background: 'rgba(42, 37, 32, 0.01)',
+                backdropFilter: 'blur(8px)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(42, 37, 32, 0.05)';
+                e.currentTarget.style.borderColor = 'rgba(42, 37, 32, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(42, 37, 32, 0.01)';
+                e.currentTarget.style.borderColor = 'rgba(42, 37, 32, 0.15)';
+              }}
+            >
+              <ChevronRight size={16} style={{ color: INK }} />
+            </button>
+          </div>
+
         </div>
       </section>
 
-
-      {/* SUBSCRIPTION TEASER — DARK */}
+      {/* 6. FINAL CTA SECTION — DARK (ORIGINAL VISUAL STYLE PRESERVED) */}
       <section className="relative py-32 lg:py-44 overflow-hidden" style={{ background: DARK_2 }}>
         <div className="absolute inset-0 opacity-[0.07]" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(139,149,121,0.5), transparent 60%)' }} />
+        
         <div className="relative max-w-[900px] mx-auto px-8 lg:px-14 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9 }}>
-            <div className="tracking-[0.42em] uppercase mb-8" style={{ fontSize: '11px', color: SAGE }}>— Membership</div>
-            <h2 className="font-serif mb-10" style={{ fontSize: 'clamp(34px, 4.4vw, 60px)', lineHeight: 1.05, color: CREAM, fontWeight: 300, letterSpacing: '-0.01em' }}>
-              A daily ritual,<br />
-              <em style={{ fontStyle: 'italic', color: SAGE }}>delivered.</em>
+            <div className="tracking-[0.42em] uppercase mb-8" style={{ fontSize: '11px', color: SAGE }}>— Final Creed</div>
+            
+            {/* Main Heading */}
+            <h2 className="font-serif mb-12" style={{ fontSize: 'clamp(34px, 4.4vw, 60px)', lineHeight: 1.05, color: CREAM, fontWeight: 300, letterSpacing: '-0.01em' }}>
+              REAL FOOD.<br />
+              <em style={{ fontStyle: 'italic', color: SAGE }}>REAL CHANGE.</em>
             </h2>
-            <p className="mx-auto mb-12" style={{ fontSize: '15px', color: 'rgba(244,239,230,0.65)', lineHeight: 1.85, maxWidth: '520px' }}>
-              Chef-curated meals arriving each morning — the most considered way to begin your day. Memberships open by invitation each season.
-            </p>
-            <Link to="/subscription"
-              className="inline-block px-9 py-4 tracking-[0.26em] uppercase transition-all duration-300"
-              style={{ fontSize: '11px', border: `1px solid ${SAGE}`, color: DARK_2, background: SAGE, borderRadius: '1px' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = CREAM; e.currentTarget.style.borderColor = CREAM; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = SAGE; e.currentTarget.style.borderColor = SAGE; }}>
-              Explore Memberships
-            </Link>
+
+            {/* Action CTA Buttons */}
+            <div className="flex flex-wrap justify-center items-center gap-8">
+              <Link to="/menu"
+                className="inline-block px-9 py-4 tracking-[0.26em] uppercase transition-all duration-300"
+                style={{ fontSize: '11px', border: `1px solid ${SAGE}`, color: DARK_2, background: SAGE, borderRadius: '1px' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = CREAM; e.currentTarget.style.borderColor = CREAM; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = SAGE; e.currentTarget.style.borderColor = SAGE; }}>
+                Explore Menu
+              </Link>
+              <Link to="/subscription"
+                className="inline-block px-9 py-4 tracking-[0.26em] uppercase transition-all duration-300"
+                style={{ fontSize: '11px', border: `1px solid rgba(244,239,230,0.25)`, color: CREAM, background: 'transparent', borderRadius: '1px' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = INK; e.currentTarget.style.borderColor = CREAM; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; e.currentTarget.style.borderColor = 'rgba(244,239,230,0.25)'; }}>
+                Join Subscription
+              </Link>
+            </div>
+
           </motion.div>
         </div>
       </section>
-
-      {false && (
-      <section className="hidden">
-        <div className="absolute inset-0 opacity-[0.08]" style={{ background: 'radial-gradient(circle at 50% 0%, rgba(139,149,121,0.4), transparent 60%)' }} />
-
-        <div className="relative max-w-[1300px] mx-auto px-8 lg:px-14">
-          <div className="text-center mb-24 max-w-2xl mx-auto">
-            <div className="tracking-[0.42em] uppercase mb-8" style={{ fontSize: '11px', color: SAGE }}>— Membership</div>
-            <h2 className="font-serif mb-10" style={{ fontSize: 'clamp(36px, 4.6vw, 64px)', lineHeight: 1.05, color: CREAM, fontWeight: 300, letterSpacing: '-0.01em' }}>
-              Eat with intention,<br />
-              <em style={{ fontStyle: 'italic', color: SAGE }}>every day.</em>
-            </h2>
-            <p style={{ fontSize: '15px', color: 'rgba(244,239,230,0.65)', lineHeight: 1.85 }}>
-              A private membership delivering chef-curated meals to your home each morning — the most considered way to begin your day.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            {[
-              { title: 'RYVIVE SILVER', tagline: 'A gentle introduction.', meals: '14 meals weekly', price: '4,999', features: ['Two meals daily', 'Seasonal menu', 'Concierge support'] },
-              { title: 'RYVIVE GOLD', tagline: 'Our most chosen plan.', meals: '21 meals weekly', price: '5,999', features: ['Three meals daily', 'Priority chef access', 'Cold-pressed elixirs', 'Personal nutritionist'], featured: true },
-              { title: 'RYVIVE PLATINUM', tagline: 'A devoted ritual.', meals: '28 meals weekly', price: '6,999', features: ['Four meals daily', 'Bespoke menu design', 'Private tastings', 'Wellness consultations'] },
-            ].map((plan, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12, duration: 0.8 }}
-                className="relative p-10 lg:p-12 flex flex-col"
-                style={{ background: plan.featured ? 'rgba(244,239,230,0.04)' : 'transparent', border: plan.featured ? `1px solid ${SAGE}` : '1px solid rgba(244,239,230,0.12)', borderRadius: '2px' }}>
-                {plan.featured && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 tracking-[0.3em] uppercase" style={{ fontSize: '9px', color: DARK_2, background: SAGE }}>
-                    Most Chosen
-                  </div>
-                )}
-                <div className="tracking-[0.32em] uppercase mb-5" style={{ fontSize: '10px', color: SAGE }}>Plan 0{i + 1}</div>
-                <h3 className="font-serif mb-2" style={{ fontSize: '34px', color: CREAM, fontWeight: 300 }}>{plan.title}</h3>
-                <p className="mb-10" style={{ fontSize: '13px', color: 'rgba(244,239,230,0.6)', fontStyle: 'italic' }}>{plan.tagline}</p>
-
-                <div className="pb-8 mb-8" style={{ borderBottom: '1px solid rgba(244,239,230,0.12)' }}>
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span style={{ fontSize: '14px', color: 'rgba(244,239,230,0.55)' }}>₹</span>
-                    <span className="font-serif" style={{ fontSize: '46px', color: CREAM, fontWeight: 300, letterSpacing: '-0.01em' }}>{plan.price}</span>
-                  </div>
-                  <div className="tracking-[0.22em] uppercase" style={{ fontSize: '10px', color: 'rgba(244,239,230,0.55)' }}>Per Month · {plan.meals}</div>
-                </div>
-
-                <ul className="space-y-4 mb-12 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3">
-                      <Check className="w-3.5 h-3.5 mt-1 flex-shrink-0" strokeWidth={1.5} style={{ color: SAGE }} />
-                      <span style={{ fontSize: '13px', color: 'rgba(244,239,230,0.78)', lineHeight: 1.6 }}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <button className="w-full py-3.5 tracking-[0.24em] uppercase transition-all duration-300"
-                  style={{ fontSize: '11px', border: `1px solid ${plan.featured ? SAGE : 'rgba(244,239,230,0.25)'}`, color: plan.featured ? DARK_2 : CREAM, background: plan.featured ? SAGE : 'transparent', borderRadius: '1px' }}
-                  onMouseEnter={(e) => {
-                    if (!plan.featured) { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = INK; }
-                    else { e.currentTarget.style.background = CREAM; e.currentTarget.style.borderColor = CREAM; }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!plan.featured) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }
-                    else { e.currentTarget.style.background = SAGE; e.currentTarget.style.borderColor = SAGE; }
-                  }}>
-                  Begin Membership
-                </button>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center mt-16 tracking-[0.22em] uppercase" style={{ fontSize: '10px', color: 'rgba(244,239,230,0.5)' }}>
-            Pause or cancel anytime · Free first delivery
-          </div>
-        </div>
-      </section>
-      )}
     </>
   );
 }
