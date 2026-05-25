@@ -90,9 +90,9 @@ export default function Menu() {
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: containerRef.current,
-      start: 'top top',
-      end: `+=${window.innerHeight * spreads.length}`,
-      scrub: 1.2,
+      start: 'top 72px',
+      end: `+=${window.innerHeight * 0.4 * spreads.length}`,
+      scrub: 0.8,
       pin: true,
       anticipatePin: 1,
       onUpdate: (self) => {
@@ -173,7 +173,7 @@ export default function Menu() {
   return (
     <div style={{ background: CREAM }} className="min-h-screen">
       {/* HERO */}
-      <section data-tone="light" className="px-5 sm:px-8 lg:px-14 pt-32 lg:pt-40 pb-10 lg:pb-14 text-center">
+      <section data-tone="light" className="px-5 sm:px-8 lg:px-14 pt-20 lg:pt-24 pb-6 lg:pb-8 text-center">
         <div className="tracking-[0.42em] uppercase mb-5" style={{ fontSize: '10px', color: SAGE_DARK }}>— Taste the Wellness</div>
         <h1 className="font-serif" style={{ fontSize: 'clamp(40px, 6vw, 80px)', lineHeight: 1.02, color: INK, fontWeight: 300, letterSpacing: '-0.015em' }}>
           Our <em style={{ fontStyle: 'italic' }}>Menu.</em>
@@ -264,7 +264,7 @@ export default function Menu() {
       </section>
 
       {/* GSAP SCROLL-DRIVEN BOOK */}
-      <div ref={containerRef} className="relative w-full h-screen overflow-hidden bg-[var(--cream)]" style={{ perspective: '2500px' }}>
+      <div ref={containerRef} className="relative w-full h-[88vh] overflow-hidden bg-[var(--cream)]" style={{ perspective: '2500px' }}>
         <div className="absolute inset-0 max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-14 py-8 flex items-center justify-center">
           <div className="relative w-full h-full lg:h-[85vh] max-h-[900px]">
             {spreads.map((spread, i) => {
