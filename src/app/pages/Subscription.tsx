@@ -136,8 +136,25 @@ export default function Subscription() {
   const currentDuration = durations[selectedPlan] ?? 1;
   const currentPrice = current.prices[currentDuration];
 
-  const next = () => setStep((s) => Math.min(5, s + 1));
-  const back = () => setStep((s) => Math.max(1, s - 1));
+  const nextStepAndScroll = () => {
+    setStep((s) => Math.min(5, s + 1));
+    setTimeout(() => {
+      const element = document.getElementById('subscription-main-panel');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
+  const backStepAndScroll = () => {
+    setStep((s) => Math.max(1, s - 1));
+    setTimeout(() => {
+      const element = document.getElementById('subscription-main-panel');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
 
   const isContinueDisabled = (step === 5 && !agreed) || (step === 3 && !delivery.morningSlot && !delivery.eveningSlot);
 
@@ -262,7 +279,7 @@ export default function Subscription() {
           </aside>
 
           {/* RIGHT — main panel */}
-          <main className="min-h-[460px]">
+          <main id="subscription-main-panel" className="min-h-[460px]" style={{ scrollMarginTop: '100px' }}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={step}
@@ -271,7 +288,7 @@ export default function Subscription() {
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.55, ease }}
               >
-                {step === 1 && <PlanStep selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} durations={durations} setDurations={setDurations} />}
+                {step === 1 && <PlanStep selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} durations={durations} setDurations={setDurations} onContinue={nextStepAndScroll} />}
                 {step === 2 && <InfoStep info={info} setInfo={setInfo} />}
                 {step === 3 && <DeliveryStep delivery={delivery} setDelivery={setDelivery} />}
                 {step === 4 && <ReviewStep plan={current} durationMonths={currentDuration} info={info} delivery={delivery} />}
@@ -283,7 +300,7 @@ export default function Subscription() {
             <div className="mt-12 lg:mt-16 flex items-center justify-between gap-4">
               <motion.button
                 whileTap={{ scale: 0.97 }}
-                onClick={back}
+                onClick={backStepAndScroll}
                 disabled={step === 1}
                 className="flex items-center gap-3 px-5 py-3.5 tracking-[0.22em] uppercase transition-all duration-300"
                 style={{
@@ -301,7 +318,7 @@ export default function Subscription() {
               <motion.button
                 whileTap={{ scale: isContinueDisabled ? 1 : 0.97 }}
                 whileHover={{ scale: isContinueDisabled ? 1 : 1.02 }}
-                onClick={step === 5 ? () => alert('Subscription confirmed') : next}
+                onClick={step === 5 ? () => alert('Subscription confirmed') : nextStepAndScroll}
                 disabled={isContinueDisabled}
                 className="flex items-center gap-3 px-7 sm:px-9 py-3.5 tracking-[0.22em] uppercase transition-all duration-300"
                 style={{
@@ -538,11 +555,13 @@ function PlanStep({
   setSelectedPlan,
   durations,
   setDurations,
+  onContinue,
 }: {
   selectedPlan: string;
   setSelectedPlan: (k: string) => void;
   durations: Record<string, DurationMonths>;
   setDurations: (d: Record<string, DurationMonths>) => void;
+  onContinue: () => void;
 }) {
   const durationOptions: DurationMonths[] = [1, 3];
 
@@ -704,7 +723,13 @@ function PlanStep({
 
               <motion.button
                 type="button"
-                onClick={() => setSelectedPlan(p.key)}
+                onClick={() => {
+                  if (isSel) {
+                    onContinue();
+                  } else {
+                    setSelectedPlan(p.key);
+                  }
+                }}
                 whileTap={{ scale: 0.96 }}
                 className="tracking-[0.28em] uppercase text-center py-4 transition-all w-full"
                 style={{
@@ -715,7 +740,7 @@ function PlanStep({
                   borderRadius: '2px',
                 }}
               >
-                {isSel ? 'Selected' : 'Select Plan'}
+                {isSel ? 'Continue →' : 'Select Plan'}
               </motion.button>
             </motion.div>
           );
