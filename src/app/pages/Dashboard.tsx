@@ -17,6 +17,8 @@ import {
   Pause,
   MapPin,
   Receipt,
+  Menu as MenuIcon,
+  X as XIcon,
 } from "lucide-react";
 import { CREAM, CREAM_2, DARK, INK, SAGE, SAGE_DARK } from "../theme";
 
@@ -515,6 +517,7 @@ export default function Dashboard() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
 
   // Edit state
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -577,15 +580,16 @@ export default function Dashboard() {
   // Lock body scroll when modals open
   useEffect(() => {
     document.body.style.overflow =
-      showPauseModal || showRenewModal || showSummary ? "hidden" : "";
+      showPauseModal || showRenewModal || showSummary || mobileNavOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [showPauseModal, showRenewModal, showSummary]);
+  }, [showPauseModal, showRenewModal, showSummary, mobileNavOpen]);
 
-  // Scroll to top on tab change
+  // Scroll to top on tab change + close mobile nav
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setMobileNavOpen(false);
   }, [activeTab]);
 
   // Loading state
@@ -997,16 +1001,67 @@ export default function Dashboard() {
 
       `}</style>
       <div className="flex pt-[72px] min-h-screen items-start relative">
+        {/* ── MOBILE NAV TRIGGER ─────────────────────────────────────────── */}
+        <button
+          type="button"
+          onClick={() => setMobileNavOpen(true)}
+          className="lg:hidden fixed top-[84px] left-3 z-40 flex items-center justify-center w-11 h-11 rounded-full"
+          style={{
+            background: DARK,
+            color: CREAM,
+            border: `1px solid rgba(244,239,230,0.18)`,
+            boxShadow: '0 6px 18px -8px rgba(20,17,15,0.4)',
+          }}
+          aria-label="Open dashboard menu"
+          aria-expanded={mobileNavOpen}
+        >
+          <MenuIcon size={18} strokeWidth={1.6} />
+        </button>
+
+        {/* ── MOBILE BACKDROP ────────────────────────────────────────────── */}
+        {mobileNavOpen && (
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen(false)}
+            aria-label="Close dashboard menu"
+            className="lg:hidden fixed inset-0 z-40"
+            style={{
+              background: 'rgba(20, 17, 15, 0.55)',
+              backdropFilter: 'blur(2px)',
+              WebkitBackdropFilter: 'blur(2px)',
+            }}
+          />
+        )}
+
         {/* ── SIDEBAR ─────────────────────────────────────────────────────── */}
         <aside
-          className="hidden lg:flex flex-col w-[260px] sticky top-[72px] flex-shrink-0"
-          style={{ background: DARK, height: "calc(100vh - 72px)" }}
+          className={`flex flex-col w-[280px] flex-shrink-0 transition-transform duration-300 ease-out
+            lg:sticky lg:top-[72px] lg:translate-x-0 lg:h-[calc(100vh-72px)] lg:w-[260px]
+            fixed top-0 left-0 z-50 h-screen
+            ${mobileNavOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+          style={{ background: DARK }}
+          aria-label="Dashboard navigation"
+          aria-hidden={!mobileNavOpen ? undefined : false}
         >
           {/* Member info */}
           <div
-            className="px-7 py-8"
+            className="px-7 py-8 relative"
             style={{ borderBottom: `1px solid rgba(244,239,230,0.08)` }}
           >
+            {/* Mobile-only close button */}
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen(false)}
+              className="lg:hidden absolute top-4 right-4 flex items-center justify-center w-9 h-9 rounded-full"
+              style={{
+                background: 'rgba(244,239,230,0.05)',
+                color: CREAM,
+                border: `1px solid rgba(244,239,230,0.12)`,
+              }}
+              aria-label="Close dashboard menu"
+            >
+              <XIcon size={16} strokeWidth={1.6} />
+            </button>
             <div
               className="tracking-[0.42em] uppercase mb-3"
               style={{ fontSize: "10px", color: SAGE }}
