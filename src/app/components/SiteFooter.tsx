@@ -6,7 +6,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CREAM, SAGE } from '../theme';
 
-const footerImage = new URL('../images/FooterImg.jpeg', import.meta.url).href;
+const footerImage = new URL('../images/FooterImg.JPG.jpeg', import.meta.url).href;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,7 +106,7 @@ export function SiteFooter() {
   }, []);
 
   return (
-    <footer ref={footerRef} data-tone="light" className="relative ">
+    <footer ref={footerRef} data-tone="light" className="relative overflow-hidden">
       <div className="absolute inset-0 bg-[#0f0c0a]" />
       {/* Static background image */}
     <div
@@ -137,7 +137,7 @@ export function SiteFooter() {
 
       <div ref={contentRef} className="relative z-10">
         <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-14 pt-24 pb-10 lg:pt-28 lg:pb-12">
-          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr] items-start">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-[1.2fr_0.8fr_0.8fr] gap-10 lg:gap-14 items-start">
             <div data-footer-left className="max-w-[26rem]">
               <div data-footer-mark className="font-serif tracking-[0.26em] uppercase mb-5" style={{ fontSize: '13px', color: CREAM }}>
                 Ryvive <span style={{ color: SAGE }}>Roots</span>
