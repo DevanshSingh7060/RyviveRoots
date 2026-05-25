@@ -4,7 +4,7 @@ import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 // Images
-import heroImage from "@/app/images/Avocado-Shake.JPG";
+import heroImage from "@/app/images/Avocado-Shake.png";
 import landing1 from "@/app/images/Landing-1.jpeg";
 import landing2 from "@/app/images/Landing-2.jpeg";
 import landing3 from "@/app/images/Landing-3.jpeg";
