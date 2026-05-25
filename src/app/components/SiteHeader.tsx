@@ -9,6 +9,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [overLight, setOverLight] = useState(false);
   const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard';
 
   useEffect(() => {
     const onScroll = () => {
@@ -27,39 +28,39 @@ export function SiteHeader() {
   const headerBorder = overLight ? 'rgba(42,37,32,0.15)' : 'rgba(244,239,230,0.15)';
 
   const links = [
-  { label: 'Story', to: '/story' },
-  { label: 'Menu', to: '/menu' },
-  { label: 'Subscription', to: '/subscription' },
-  { label: 'Franchise', to: '/franchise' },
-  { label: 'Career', to: '/career' },
-];
+    { label: 'Story', to: '/story' },
+    { label: 'Menu', to: '/menu' },
+    { label: 'Subscription', to: '/subscription' },
+    { label: 'Franchise', to: '/franchise' },
+    { label: 'Career', to: '/career' },
+  ];
 
   return (
     <header
       className="fixed top-0 left-0 right-0 z-[9999] transition-all duration-500"
       style={{
-        background: scrolled ? (overLight ? 'rgba(244,239,230,0.92)' : 'rgba(20,17,15,0.9)') : 'transparent',
-        backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        borderBottom: scrolled ? `1px solid ${headerBorder}` : '1px solid transparent',
+        background: (scrolled || isDashboard) ? (overLight ? 'rgba(244,239,230,0.92)' : 'rgba(20,17,15,0.9)') : 'transparent',
+        backdropFilter: (scrolled || isDashboard) ? 'blur(16px)' : 'none',
+        borderBottom: (scrolled || isDashboard) ? `1px solid ${headerBorder}` : '1px solid transparent',
       }}
     >
       <div className="max-w-[1400px] mx-auto px-8 lg:px-14">
         <div className="flex items-center justify-between h-[72px]">
           <Link
-  to="/"
-  className="transition-opacity duration-300"
->
-  <img
-  src={Logo}
-  alt="Ryvive Roots"
-  style={{
-    height: '72px',
-    width: 'auto',
-    objectFit: 'contain',
-    opacity: 0.95,
-  }}
-/>
-</Link>
+            to="/"
+            className="transition-opacity duration-300"
+          >
+            <img
+              src={Logo}
+              alt="Ryvive Roots"
+              style={{
+                height: '72px',
+                width: 'auto',
+                objectFit: 'contain',
+                opacity: 0.95,
+              }}
+            />
+          </Link>
 
           <nav className="hidden lg:flex items-center gap-11">
             {links.map((item) => {
@@ -96,7 +97,7 @@ export function SiteHeader() {
             >
               <User size={13} strokeWidth={1.4} /> Login
             </Link>
-            
+
             <BurgerMenu headerText={headerText} headerMuted={headerMuted} />
           </div>
         </div>
