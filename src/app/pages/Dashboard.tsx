@@ -1045,7 +1045,7 @@ export default function Dashboard() {
         >
           {/* Member info */}
           <div
-            className="px-7 py-8 relative"
+            className="px-7 py-8 pt-24 lg:pt-8 relative"
             style={{ borderBottom: `1px solid rgba(244,239,230,0.08)` }}
           >
             {/* Mobile-only close button */}
