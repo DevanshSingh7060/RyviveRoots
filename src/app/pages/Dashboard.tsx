@@ -965,7 +965,7 @@ export default function Dashboard() {
 
   // ─── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen dash-root" style={{ background: CREAM_2 }}>
+    <div className="min-h-screen dash-root" style={{ background: CREAM_2 }} data-tone="light">
       <style>{`
         /* Typography — match site-wide system */
         .dash-root { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight:300; letter-spacing: 0.01em; color: ${INK}; }
