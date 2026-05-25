@@ -4,7 +4,7 @@ import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 // Images
-import heroImage from "@/app/images/Avocado-Shake.JPG";
+import heroImage from "@/app/images/Avocado Shake.JPG";
 import landing1 from "@/app/images/Landing-1.jpeg";
 import landing2 from "@/app/images/Landing-2.jpeg";
 import landing3 from "@/app/images/Landing-3.jpeg";
@@ -61,47 +61,21 @@ const testimonials = [
   }
 ];
 
-// 8 Categories Data mapped to original card visuals
+// 4 Categories Data mapped to original card visuals
 const categories = [
-  { title: "Sandwiches", desc: "Luxury artisan grilled sourdoughs with custom herb spreads", price: "Grill Series", image: menu1 },
+  { title: "Bowls", desc: "Macro-balanced energy reserves utilizing plant clean protein", price: "Clean Protein", image: menu4 },
   { title: "Salads", desc: "Organic garden beds with microgreens & house seed toppings", price: "House Bowls", image: landing1 },
   { title: "Wraps", desc: "Antioxidant wheat rolls with crisp fresh vegetables", price: "Fresh Rolls", image: landing2 },
-  { title: "Pasta", desc: "Light zoodle variations & high-fiber organic pasta bowls", price: "Zoodles", image: menu2 },
-  { title: "Soups", desc: "Velvety warm broths crafted for digestion and vitality", price: "Warm Bowls", image: landing3 },
-  { title: "Juices", desc: "Cold-pressed elixirs & premium functional wellness shots", price: "Elixirs", image: heroImage },
-  { title: "Healthy Chaat", desc: "Reimagined classics utilizing sweet potato & citrus vinaigrettes", price: "Refined Street", image: landing4 },
-  { title: "Protein Bowls", desc: "Macro-balanced energy reserves utilizing plant clean protein", price: "Clean Protein", image: menu4 }
+  { title: "Cold-Pressed Juices", desc: "Cold-pressed elixirs & premium functional wellness shots", price: "Elixirs", image: heroImage }
 ];
 
 export default function Home() {
   // Testimonial sliding state
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [visibleCards, setVisibleCards] = useState(2);
+  const visibleCards = 1;
 
-  // Dynamic visible card calculation to preserve responsive original layouts
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setVisibleCards(2); // exactly matches original md:grid-cols-2 column count
-      } else {
-        setVisibleCards(1);
-      }
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize(); // trigger initially
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Clamp sliding index on resize
-  useEffect(() => {
-    setCurrentIndex((prev) => {
-      const maxIndex = testimonials.length - visibleCards;
-      return Math.min(prev, maxIndex);
-    });
-  }, [visibleCards]);
-
-  // Autoplay Slider - Slides one by one with a 4000ms delay
+  // Autoplay Slider - Slides one by one with a 2800ms delay
   useEffect(() => {
     if (isHovered) return;
     const interval = setInterval(() => {
@@ -109,9 +83,9 @@ export default function Home() {
         const maxIndex = testimonials.length - visibleCards;
         return prev >= maxIndex ? 0 : prev + 1;
       });
-    }, 4000);
+    }, 2800);
     return () => clearInterval(interval);
-  }, [isHovered, visibleCards]);
+  }, [isHovered]);
 
   const handleNextTestimonial = () => {
     setCurrentIndex((prev) => {
@@ -151,7 +125,7 @@ export default function Home() {
             {/* Main Heading */}
             <h1 className="font-serif mb-10 text-left" style={{ fontSize: 'clamp(42px, 6.2vw, 84px)', lineHeight: 1.04, letterSpacing: '-0.012em', color: CREAM, fontWeight: 300 }}>
               Welcome to<br />
-              <em style={{ fontStyle: 'italic', color: SAGE }}>Ryvive Roots</em>
+              <span style={{ fontStyle: 'normal', color: SAGE }}>Ryvive Roots</span>
             </h1>
             
             {/* Subheading */}
@@ -161,29 +135,9 @@ export default function Home() {
             
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-8">
-              <Link to="/menu"
-                className="px-8 py-3.5 tracking-[0.22em] uppercase transition-all duration-300"
-                style={{ fontSize: '11px', border: `1px solid ${CREAM}`, color: CREAM, borderRadius: '1px' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = INK; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = CREAM; }}>
-                Explore Menu
-              </Link>
               <Link to="/subscription" className="tracking-[0.22em] uppercase transition-colors" style={{ fontSize: '11px', color: 'rgba(244,239,230,0.7)' }}>
                 Start Subscription →
               </Link>
-            </div>
-
-            {/* Supporting & Highlight Creed (Integrated elegantly inside the layout grid) */}
-            <div className="mt-16 pt-8 border-t border-[rgba(244,239,230,0.12)] flex flex-wrap justify-between gap-6 max-w-xl items-end">
-              <div>
-                <span className="tracking-[0.25em] uppercase text-[9px] block mb-1" style={{ color: SAGE }}>Supporting Ritual</span>
-                <p className="font-serif italic text-base text-left" style={{ color: CREAM }}>Where Wellness Begin</p>
-              </div>
-              <div className="tracking-[0.22em] uppercase text-[11px] flex flex-col gap-1 font-bold text-left" style={{ color: CREAM }}>
-                <span>REAL FOOD.</span>
-                <span>REAL INGREDIENTS.</span>
-                <span>REAL CHANGE.</span>
-              </div>
             </div>
 
           </motion.div>
@@ -352,7 +306,7 @@ export default function Home() {
           </div>
 
           {/* Testimonials Carousel Track Container with swipe controls */}
-          <div className="relative w-full overflow-hidden py-4">
+          <div className="relative w-full max-w-2xl mx-auto overflow-hidden py-4">
             <motion.div 
               className="flex gap-12 items-stretch"
               animate={{ x: `calc(-${currentIndex} * (100% + 48px) / ${visibleCards})` }}
